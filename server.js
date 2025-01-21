@@ -52,9 +52,37 @@ app.post("/api/post",async (req, res)=>{
 })
 
 
-
 // to be continued........
 
+//starting from here
+
+app.put('/api/modify/:id', async (req, res)=>{
+    try {
+        const updateUser = await User.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new:true,runValidators:true}
+        )
+        if (!updateUser) {
+            return res.status(404).json({message:"User not Found!"})
+        }
+        res.json(updateUser)
+    } catch (error) {
+        res.status(400).json({message:error.message})
+    }
+})
+
+app.delete('/api/delete/:id', async (req, res)=>{
+    try {
+        const deletUser = await User.findByIdAndDelete(req.params.id)
+        if (!deletUser) {
+            return res.status(404).json({message:"User not found"})
+        }
+        res.json({message:"user found and deleted Successfully"})
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+})
 app.listen(port, ()=>{
 console.log(`you server is running on port localhost:${port}`)
 })
